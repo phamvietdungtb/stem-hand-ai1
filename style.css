@@ -4,10 +4,13 @@ body {
     background-color: #0b0f19;
     color: #ffffff;
     margin: 0;
-    padding: 20px;
+    padding: 10px 20px;
     display: flex;
     justify-content: center;
-    overflow-x: hidden;
+    align-items: center;
+    height: 100vh; /* Ép vừa đúng 1 màn hình */
+    box-sizing: border-box;
+    overflow: hidden; /* Xóa sổ thanh cuộn */
 }
 
 .background-grid {
@@ -25,88 +28,156 @@ body {
     display: flex;
     width: 100%;
     max-width: 1200px;
-    gap: 30px;
+    height: 100%;
+    max-height: 100vh;
+    gap: 20px;
     z-index: 1;
+    box-sizing: border-box;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .left-panel {
-    flex: 2; /* Chiếm 2 phần */
+    flex: 2;
     text-align: center;
     display: flex;
     flex-direction: column;
+    justify-content: space-between; /* Trải đều không gian dọc */
+    height: 100%;
+    overflow: hidden;
 }
 
 .right-panel {
-    flex: 1; /* Chiếm 1 phần */
+    flex: 1;
     background: rgba(15, 23, 42, 0.8);
     border: 2px solid #b026ff;
     border-radius: 15px;
-    padding: 20px;
+    padding: 15px;
     box-shadow: 0 0 20px rgba(176, 38, 255, 0.2);
-    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    max-height: 100%;
+    overflow: hidden; /* Khóa cuộn toàn bảng */
 }
+
+.right-panel .high-score-list {
+    overflow-y: auto; /* Chỉ cho phép cuộn danh sách điểm nếu quá dài */
+    flex: 1;
+    padding-right: 5px;
+}
+
+/* Tùy chỉnh thanh cuộn cho danh sách điểm */
+.high-score-list::-webkit-scrollbar { width: 5px; }
+.high-score-list::-webkit-scrollbar-thumb { background: #00e5ff; border-radius: 5px; }
 
 /* Hiệu ứng làm mờ khi thắng */
-.blur-effect {
-    filter: blur(8px) brightness(0.6);
-    transition: filter 0.3s ease;
-}
+.blur-effect { filter: blur(6px) brightness(0.6); transition: filter 0.2s ease; }
 
 /* --- PHẦN TIÊU ĐỀ --- */
-.header { margin-bottom: 20px; }
-.subtitle { font-family: 'Orbitron', sans-serif; color: #00e5ff; letter-spacing: 3px; margin: 0; font-size: 1.2rem; }
-.title { font-family: 'Orbitron', sans-serif; color: #ffffff; font-size: 2.2rem; margin: 5px 0 10px 0; text-shadow: 0 0 10px #b026ff; }
-.badge { display: inline-block; background: linear-gradient(90deg, #00e5ff, #b026ff); padding: 8px 20px; border-radius: 20px; font-weight: bold; font-size: 0.9rem; }
-.round-info { font-family: 'Orbitron', sans-serif; color: #fbd38d; font-size: 1.2rem; margin-top: 15px; }
+.header { margin-bottom: 5px; }
+.subtitle { font-family: 'Orbitron', sans-serif; color: #00e5ff; letter-spacing: 2px; margin: 0; font-size: 1rem; }
+.title { font-family: 'Orbitron', sans-serif; color: #ffffff; font-size: 1.8rem; margin: 5px 0; text-shadow: 0 0 10px #b026ff; }
+.badge { display: inline-block; background: linear-gradient(90deg, #00e5ff, #b026ff); padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 0.8rem; }
+.round-info { font-family: 'Orbitron', sans-serif; color: #fbd38d; font-size: 1rem; margin-top: 5px; }
 
 /* --- BẢNG ĐIỂM --- */
-.scoreboard { display: flex; justify-content: center; align-items: center; gap: 20px; margin-bottom: 20px; font-family: 'Orbitron', sans-serif; }
-.score-box { background: rgba(255, 255, 255, 0.05); border: 2px solid; border-radius: 15px; padding: 10px 20px; min-width: 120px; backdrop-filter: blur(5px); }
-.score-box.player { border-color: #00e5ff; box-shadow: 0 0 15px rgba(0, 229, 255, 0.3); }
-.score-box.bot { border-color: #ff3366; box-shadow: 0 0 15px rgba(255, 51, 102, 0.3); }
-.label { display: block; font-size: 0.8rem; color: #a0aec0; margin-bottom: 5px; }
-.score { font-size: 2.2rem; font-weight: bold; }
-.vs { font-size: 1.5rem; font-weight: bold; color: #fbd38d; animation: pulse 1.5s infinite; }
+.scoreboard { display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 5px; font-family: 'Orbitron', sans-serif; }
+.score-box { background: rgba(255, 255, 255, 0.05); border: 2px solid; border-radius: 10px; padding: 5px 15px; min-width: 100px; backdrop-filter: blur(5px); }
+.score-box.player { border-color: #00e5ff; box-shadow: 0 0 10px rgba(0, 229, 255, 0.3); }
+.score-box.bot { border-color: #ff3366; box-shadow: 0 0 10px rgba(255, 51, 102, 0.3); }
+.label { display: block; font-size: 0.7rem; color: #a0aec0; margin-bottom: 2px; }
+.score { font-size: 1.8rem; font-weight: bold; }
+.vs { font-size: 1.2rem; font-weight: bold; color: #fbd38d; animation: pulse 1.5s infinite; }
 
-/* --- KHU VỰC CAMERA --- */
+/* --- KHU VỰC CAMERA RESPONSIVE --- */
+.game-area {
+    flex: 1; /* Chiếm toàn bộ không gian còn trống ở giữa */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 0; /* Quan trọng để flex không bị tràn */
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
 .video-container {
     position: relative;
-    display: inline-block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border-radius: 15px;
     padding: 5px;
     background: linear-gradient(45deg, #00e5ff, #b026ff);
-    box-shadow: 0 0 20px rgba(176, 38, 255, 0.3);
-    margin-bottom: 20px;
-    transition: all 0.3s ease;
+    box-shadow: 0 0 15px rgba(176, 38, 255, 0.3);
+    height: 100%;
+    max-height: 45vh; /* Khống chế chiều cao để video nhỏ lại */
+    aspect-ratio: 4/3; /* Luôn giữ tỷ lệ khung hình video chuẩn */
 }
-canvas { display: block; border-radius: 10px; background-color: #000; max-width: 100%; height: auto; transition: filter 0.3s ease; }
-.countdown-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-family: 'Orbitron', sans-serif; font-size: 8rem; font-weight: bold; color: #ffffff; text-shadow: 0 0 30px #00e5ff, 0 0 60px #b026ff; z-index: 10; pointer-events: none; }
+
+canvas {
+    display: block;
+    border-radius: 10px;
+    background-color: #000;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: filter 0.2s ease;
+}
+
+.countdown-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-family: 'Orbitron', sans-serif; font-size: 5rem; font-weight: bold; color: #ffffff; text-shadow: 0 0 20px #00e5ff, 0 0 40px #b026ff; z-index: 10; pointer-events: none; }
+
+/* --- HIỆU ỨNG CHỮ CONGRATULATIONS --- */
+.congrats-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.5);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.8rem;
+    font-weight: bold;
+    color: #ffd700;
+    text-shadow: 0 0 10px #ff0055, 0 0 30px #ff0055, 0 0 50px #ff0055;
+    z-index: 20;
+    pointer-events: none;
+    opacity: 0;
+    text-align: center;
+    width: 100%;
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.congrats-text.show {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
 
 /* --- BẢNG THÔNG BÁO --- */
-.status-panel { background: rgba(0, 0, 0, 0.6); border: 1px solid #4a5568; border-radius: 15px; padding: 15px; }
-.choice-display { font-size: 1.1rem; color: #e2e8f0; margin-bottom: 5px; }
-.result-text { font-family: 'Orbitron', sans-serif; font-size: 1.5rem; font-weight: bold; color: #48bb78; }
+.status-panel { background: rgba(0, 0, 0, 0.6); border: 1px solid #4a5568; border-radius: 10px; padding: 10px; }
+.choice-display { font-size: 1rem; color: #e2e8f0; margin-bottom: 5px; }
+.result-text { font-family: 'Orbitron', sans-serif; font-size: 1.3rem; font-weight: bold; color: #48bb78; }
 
 /* --- BẢNG XẾP HẠNG BÊN PHẢI --- */
-.leaderboard-title { font-family: 'Orbitron', sans-serif; color: #00e5ff; font-size: 1.5rem; margin-top: 0; text-align: center; border-bottom: 1px solid #4a5568; padding-bottom: 15px; }
-.high-score-list { list-style: none; padding: 0; margin: 0; }
-.high-score-list li { background: rgba(255, 255, 255, 0.05); margin-bottom: 10px; padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; font-family: 'Orbitron', sans-serif; border-left: 4px solid #00e5ff; font-size: 1.1rem; }
+.leaderboard-title { font-family: 'Orbitron', sans-serif; color: #00e5ff; font-size: 1.2rem; margin-top: 0; text-align: center; border-bottom: 1px solid #4a5568; padding-bottom: 10px; margin-bottom: 10px; }
+.high-score-list { list-style: none; margin: 0; padding: 0; }
+.high-score-list li { background: rgba(255, 255, 255, 0.05); margin-bottom: 8px; padding: 10px; border-radius: 8px; display: flex; justify-content: space-between; font-family: 'Orbitron', sans-serif; border-left: 4px solid #00e5ff; font-size: 0.95rem; }
 .high-score-list li:nth-child(1) { border-left-color: #ffd700; color: #ffd700; font-weight: bold; transform: scale(1.02); }
 .high-score-list li:nth-child(2) { border-left-color: #c0c0c0; color: #c0c0c0; }
 .high-score-list li:nth-child(3) { border-left-color: #cd7f32; color: #cd7f32; }
 
 /* --- MODALS & BUTTONS --- */
 .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); display: flex; justify-content: center; align-items: center; z-index: 100; }
-.modal-box { background: #0f172a; border: 2px solid #b026ff; border-radius: 20px; padding: 30px; width: 90%; max-width: 400px; text-align: center; }
-.modal-box h2 { font-family: 'Orbitron', sans-serif; color: #00e5ff; }
-.modal-box input { width: 85%; padding: 12px; margin: 15px 0; border-radius: 8px; border: 1px solid #4a5568; background: #1a202c; color: white; text-align: center; font-size: 1.1rem;}
-.final-score-text { font-size: 1.5rem; color: #48bb78; font-weight: bold; margin-bottom: 20px; }
-.neon-btn { background: linear-gradient(45deg, #00e5ff, #b026ff); color: white; border: none; padding: 12px 25px; font-family: 'Orbitron', sans-serif; font-size: 1rem; font-weight: bold; border-radius: 8px; cursor: pointer; transition: all 0.3s; text-transform: uppercase; }
+.modal-box { background: #0f172a; border: 2px solid #b026ff; border-radius: 15px; padding: 20px; width: 90%; max-width: 400px; text-align: center; }
+.modal-box h2 { font-family: 'Orbitron', sans-serif; color: #00e5ff; margin-top: 0;}
+.modal-box input { width: 85%; padding: 10px; margin: 10px 0; border-radius: 8px; border: 1px solid #4a5568; background: #1a202c; color: white; text-align: center; font-size: 1rem;}
+.final-score-text { font-size: 1.5rem; color: #48bb78; font-weight: bold; margin-bottom: 15px; }
+.neon-btn { background: linear-gradient(45deg, #00e5ff, #b026ff); color: white; border: none; padding: 10px 20px; font-family: 'Orbitron', sans-serif; font-size: 1rem; font-weight: bold; border-radius: 8px; cursor: pointer; transition: all 0.3s; text-transform: uppercase; }
 .neon-btn:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(0, 229, 255, 0.6); }
 .hidden { display: none !important; }
 
-/* Reponsive cho màn hình nhỏ */
+/* Đảm bảo vẫn hoạt động trên màn hình dọc nhỏ (điện thoại) */
 @media (max-width: 900px) {
-    .main-layout { flex-direction: column; }
-    .left-panel, .right-panel { width: 100%; }
+    body { height: auto; overflow: auto; }
+    .main-layout { flex-direction: column; height: auto; max-height: none; }
+    .left-panel, .right-panel { width: 100%; flex: none; height: auto; }
+    .video-container { aspect-ratio: 4/3; width: 100%; max-height: none; }
+    .congrats-text { font-size: 2rem; }
 }
