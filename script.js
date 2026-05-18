@@ -1,6 +1,7 @@
 const videoElement = document.getElementById('webcam');
 const canvasElement = document.getElementById('output_canvas');
 const canvasCtx = canvasElement.getContext('2d');
+const videoContainer = document.getElementById('videoContainer'); // Lấy container để chèn chữ
 
 const scorePlayerEl = document.getElementById('scorePlayer');
 const scoreBotEl = document.getElementById('scoreBot');
@@ -13,6 +14,12 @@ const playerNameDisplay = document.getElementById('playerNameDisplay');
 // Các Modal
 const nameModal = document.getElementById('nameModal');
 const gameOverModal = document.getElementById('gameOverModal');
+
+// 🌟 TỰ ĐỘNG TẠO THẺ CHỮ CONGRATULATIONS BẰNG JAVASCRIPT
+const congratsEl = document.createElement('div');
+congratsEl.className = 'congrats-text';
+congratsEl.innerText = 'CONGRATULATIONS!';
+videoContainer.appendChild(congratsEl);
 
 // Âm thanh
 const soundTick = new Audio('tick.mp3'); 
@@ -31,8 +38,7 @@ let currentGesture = "Đang chờ... 🤔";
 
 // --- QUẢN LÝ GIAO DIỆN VÀ BẢNG XẾP HẠNG TRỰC TIẾP ---
 
-// Khởi chạy hiển thị BXH ngay khi web load
-hienThiBXH();
+hienThiBXH(); // Khởi chạy BXH lúc web load
 
 function batDauGame() {
     const inputName = document.getElementById('playerNameInput').value.trim();
@@ -59,7 +65,7 @@ function capNhatHienThiLuot() {
 function ketThucGame() {
     isGameActive = false;
     luotUuDiem(); 
-    hienThiBXH(); // Cập nhật lại BXH bên phải ngay lập tức
+    hienThiBXH(); 
     
     document.getElementById('finalScoreText').innerText = `Tổng điểm: ${diemNguoiChoi}`;
     gameOverModal.classList.remove('hidden');
@@ -80,7 +86,6 @@ function luotUuDiem() {
     localStorage.setItem('aiOanTuTi_HighScores', JSON.stringify(danhSachDiem));
 }
 
-// Hàm này giờ sẽ in điểm ra khung bên phải
 function hienThiBXH() {
     const listEl = document.getElementById('highScoreList');
     listEl.innerHTML = ""; 
@@ -162,13 +167,17 @@ function xetThangThua() {
         resultTextEl.style.color = "#00e5ff";
         diemNguoiChoi++;
         
-        // 🌟 HIỆU ỨNG THẮNG: Làm mờ camera cũ và tung pháo hoa
-        canvasElement.classList.add('blur-effect'); // Làm mờ
-        confetti({ particleCount: 200, spread: 90, origin: { y: 0.5 }, zIndex: 9999 }); // Bắn pháo
+        // 🌟 HIỆU ỨNG THẮNG MỚI: Tung pháo, mờ camera, và hiện chữ
+        canvasElement.classList.add('blur-effect'); 
+        congratsEl.classList.add('show');
+        confetti({ particleCount: 200, spread: 90, origin: { y: 0.5 }, zIndex: 9999 }); 
         soundWin.currentTime = 0; soundWin.play().catch(e=>{});
         
-        // Tắt làm mờ sau 2.5 giây
-        setTimeout(() => { canvasElement.classList.remove('blur-effect'); }, 2500);
+        // Tắt làm mờ và ẩn chữ sau đúng 0.8 giây (800ms)
+        setTimeout(() => { 
+            canvasElement.classList.remove('blur-effect'); 
+            congratsEl.classList.remove('show');
+        }, 800);
 
     } else {
         resultTextEl.innerText = "MÁY THẮNG! 🤖";
